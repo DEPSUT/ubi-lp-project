@@ -109,7 +109,7 @@ void mat_init(matrix *mat, int cols, int rows)
 {
     mat->cols = cols;
     mat->rows = rows;
-    mat->data = (int **)malloc(mat->rows * sizeof(int));
+    mat->data = (int **)malloc(mat->rows * sizeof(int *));
     for (int i = 0; i < mat->rows; i++)
         mat->data[i] = (int *)malloc(mat->cols * sizeof(int));
 }
