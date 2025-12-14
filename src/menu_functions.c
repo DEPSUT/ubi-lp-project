@@ -1,22 +1,40 @@
+/**
+ * @file menu_functions.c
+ * @brief Implementação da lógica de negócio das opções do menu.
+ * @authors Rafael Reis, Diogo Rodrigues, António Gaspar, Martim Roque
+ * @version 1.0
+ */
+
 #include "menu_functions.h"
 
+/**
+ * @brief Tabela de Despacho (@a Dispatch @a Table) do menu.
+ * Substitui a necessidade de grandes estruturas @c switch.
+ * Cada linha contém metadados e um ponteiro para a função a executar.
+ */
 const menuItem menu[] = {
-    {"Máximo", "Mostra o maior valor inserido no vetor.", menu_max},
-    {"Seno", "Calcula e apresenta o valor do seno de cada elemento do vetor.", menu_sin},
-    {"Divisíveis por 3", "Mostra todos os elementos do vetor que são divisíveis por 3.", menu_div_3},
-    {"Matriz ordernada", "Mostra uma matriz em que a primeira linha mostra o vetor original e a segunda linha mostra o vetor ordernado por ordem crescente.", menu_sorted_matrix},
-    {"Multiplicar por 3", "Mostra todos os elementos do vetor multiplicados por 3.", menu_mult_3},
-    {"Vetor ordernado", "Mostra o vetor ordenado por ordem crescente.", menu_sorted_vector},
-    {"Menu de Ajuda", "Mostra este menu de ajuda.", menu_help_page},
-    {"Soma com segundo vetor", "Pede a leitura de um novo vetor e calcula a soma do primeiro vetor com o dobro do segundo vetor.", menu_sum_second_vector},
-
-    // {"Decomposição em números primos", "Mostra a decomposição em números primos de cada elemento do vetor."},
-    // {"Matriz 20x20", "Leitura de um novo vetor, cálculo e apresentação da matriz 20x20 resultante do produto do vetor inicial com o novo vetor lido."},
-    // {"Determinante", "Calcula e apresenta a determinante da matriz criada na opção anterior."},
+    {"Máximo", "Mostra o maior valor inserido no vetor.", menu_max, 1},
+    {"Seno", "Calcula e apresenta o valor do seno de cada elemento do vetor.", menu_sin, 1},
+    {"Divisíveis por 3", "Mostra todos os elementos do vetor que são divisíveis por 3.", menu_div_3, 1},
+    {"Matriz ordernada", "Mostra uma matriz em que a primeira linha mostra o vetor original e a segunda linha mostra o vetor ordernado por ordem crescente.", menu_sorted_matrix, 1},
+    {"Multiplicar por 3", "Mostra todos os elementos do vetor multiplicados por 3.", menu_mult_3, 1},
+    {"Vetor ordernado", "Mostra o vetor ordenado por ordem crescente.", menu_sorted_vector, 1},
+    {"Menu de Ajuda", "Mostra este menu de ajuda.", menu_help_page, 0},
+    {"Soma com segundo vetor", "Pede a leitura de um novo vetor e calcula a soma do primeiro vetor com o dobro do segundo vetor.", menu_sum_second_vector, 1},
+    {"Decomposição em números primos", "Mostra a decomposição em números primos de cada elemento do vetor.", menu_prime_decomposition, 1},
+    {"Matriz 20x20", "Leitura de um novo vetor, cálculo e apresentação da matriz 20x20 resultante do produto do vetor inicial com o novo vetor lido.", menu_matrix_20x20, 1},
+    {"Determinante", "Calcula e apresenta a determinante da matriz criada na opção anterior.", menu_matrix_determinant, 0},
 };
 
 const int TOTAL_ITEMS = sizeof(menu) / sizeof(menu[0]);
 const int TOTAL_PAGES = (TOTAL_ITEMS + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
+
+/**
+ * @brief Matriz persistente gerada pela opção 10.
+ * Declarada como @c static para restringir o @c scope a este ficheiro.
+ */
+static matrix stored_matrix;       ///< Guarda o valor da matriz para ser utilizada noutra opção do menu
+static int matrix_initialized = 0; ///< Permite saber se a matriz já foi criada
 
 #if DEBUGGING_ENABLED
 void generateRandomVector(vector *vec)
@@ -26,7 +44,7 @@ void generateRandomVector(vector *vec)
 }
 #endif
 
-int getTrail(vector vec)
+int getTrail(vector *vec)
 {
     int max = vec_get_max(vec);
     int trail = numOfDig(vec_get_min(vec));
@@ -39,7 +57,7 @@ int getTrail(vector vec)
 void menu_max(void *_vec)
 {
     vector *vec = (vector *)_vec;
-    print("O elemento máximo do vetor é %d\n\n", vec_get_max(*vec));
+    print("O elemento máximo do vetor é %d\n\n", vec_get_max(vec));
 }
 
 void menu_sin(void *_vec)
@@ -47,7 +65,7 @@ void menu_sin(void *_vec)
     vector *vec = (vector *)_vec;
     print("Seno de cada elemento:\n");
     // Trail of spaces for the result of sine (formats nicely)
-    const int trail = getTrail(*vec);
+    const int trail = getTrail(vec);
     const int sinTrail = 9;
     for (int i = 0; i < vec->size; i++)
     {
@@ -62,8 +80,9 @@ void menu_sin(void *_vec)
 void menu_div_3(void *_vec)
 {
     vector *vec = (vector *)_vec;
+
     print("Elementos divisíveis por 3:\n");
-    const int trail = getTrail(*vec);
+    const int trail = getTrail(vec);
     int count = 0;
     for (int i = 0; i < vec->size; i++)
         if (vec->data[i] % 3 == 0)
@@ -80,24 +99,28 @@ void menu_div_3(void *_vec)
 void menu_sorted_matrix(void *_vec)
 {
     vector *vec = (vector *)_vec;
+
     print("Vetor original e vetor ordernado por ordem crescente respetivamente:\n");
+
     matrix mat;
     mat_init(&mat, vec->size, 2);
-    const int trail = getTrail(*vec);
+
+    const int trail = getTrail(vec);
+
     for (int i = 0; i < vec->size; i++)
     {
         mat.data[0][i] = vec->data[i];
         mat.data[1][i] = mat.data[0][i];
     }
+
     vector tempVec;
     tempVec.data = mat.data[1];
     tempVec.size = mat.cols;
     vec_sort_asc(&tempVec);
     for (int i = 0; i < mat.rows; i++)
-    {
         tempVec.data = mat.data[i];
-        vec_write(&tempVec, trail);
-    }
+
+    mat_write(&mat, trail);
     mat_destroy(&mat);
     print("\n");
 }
@@ -106,7 +129,7 @@ void menu_mult_3(void *_vec)
 {
     vector *vec = (vector *)_vec;
     print("Elementos do vetor multiplicados por 3:\n");
-    const int trail = getTrail(*vec) + 1;
+    const int trail = getTrail(vec) + 1;
     for (int i = 0; i < vec->size; i++)
     {
         int res = vec->data[i] * 3;
@@ -121,7 +144,7 @@ void menu_mult_3(void *_vec)
 void menu_sorted_vector(void *_vec)
 {
     vector *vec = (vector *)_vec;
-    const int trail = getTrail(*vec);
+    const int trail = getTrail(vec);
     vector sortedVec;
     vec_copy_from_to(vec, &sortedVec);
     vec_sort_asc(&sortedVec);
@@ -131,7 +154,7 @@ void menu_sorted_vector(void *_vec)
     vec_destroy(&sortedVec);
 }
 
-void menu_help_page(void *_vec)
+void menu_help_page(void *_)
 {
     int option = -1;
     int page = 0;
@@ -145,9 +168,10 @@ void menu_help_page(void *_vec)
             end = TOTAL_ITEMS;
 
         print("\n================ MENU DE AJUDA (Pág %d/%d) ================\n\n", page + 1, TOTAL_PAGES);
-        for (int i = start; i < end; i++)
+        int k = 1;
+        for (int i = start; i < end; i++, k++)
         {
-            print("%d - %s\n", i + 1, menu[i].title);
+            print("%d - %s\n", k, menu[i].title);
             print("\t-> %s\n", menu[i].help);
         }
 
@@ -158,7 +182,7 @@ void menu_help_page(void *_vec)
         if (TOTAL_PAGES - 1 > page)
             print("9 - Página seguinte\n");
 
-        print("\n0 - Sair\n\n");
+        print("\n0 - Voltar\n\n");
         print(":");
 
         scan("%d", &option);
@@ -182,19 +206,14 @@ void menu_help_page(void *_vec)
 void menu_sum_second_vector(void *_vec)
 {
     vector *vec = (vector *)_vec;
-    const int trail = getTrail(*vec);
+    const int trail = getTrail(vec);
     vector vec2;
     vec_init(&vec2, vec->size);
 #if DEBUGGING_ENABLED
     generateRandomVector(&vec2);
 #else
-    {
-        int tmp = lines;
-        lines = 0;
-        vec_read(&vec2, MIN, MAX);
-        clearOutput();
-        lines = tmp;
-    }
+    print("Insira valores entre %d e %d para o segundo vetor\n", MIN, MAX);
+    vec_read(&vec2, MIN, MAX);
 #endif
     vector vec3;
     vec_init(&vec3, vec->size);
@@ -206,6 +225,110 @@ void menu_sum_second_vector(void *_vec)
     print("\n");
     vec_destroy(&vec2);
     vec_destroy(&vec3);
+}
+
+void print_prime_demposition(int num)
+{
+    switch (num)
+    {
+    case 0:
+    case 1:
+    case -1:
+        print("%d", num);
+        return;
+    }
+
+    // Verifica se é o primeiro número a ser
+    // escrito para a formatação ser consistente
+    int isFirst = 1;
+    if (num < 0)
+    {
+        print("-1");
+        num = -num;
+        isFirst = 0;
+    }
+
+    int k = 2;
+    while (num > 1)
+    {
+        if (num % k == 0)
+        {
+            if (!isFirst)
+                print(" x ");
+            print("%d", k);
+            num /= k;
+            isFirst = 0;
+        }
+        else
+            k++;
+    }
+}
+
+void menu_prime_decomposition(void *_vec)
+{
+    vector *vec = (vector *)_vec;
+    print("Decomposição dos elementos do vetor em números primos:\n");
+    const int trail = getTrail(vec);
+    for (int i = 0; i < vec->size; i++)
+    {
+        print("%*d: ", trail, vec->data[i]);
+        print_prime_demposition(vec->data[i]);
+        print("\n");
+    }
+    print("\n");
+}
+
+/**
+ * @brief Gera uma matriz a partir do produto externo de dois vetores.
+ * A matriz resultante é guardada na variável estática @c stored_matrix
+ * para poder ser usada posteriormente pela função do determinante.
+ * @param _vec Ponteiro @c void para o vetor principal (@a cast para @c vector* internamente).
+ */
+void menu_matrix_20x20(void *_vec)
+{
+    vector *vec = (vector *)_vec;
+    const int trail = getTrail(vec);
+    vector vec2;
+    vec_init(&vec2, vec->size);
+#if DEBUGGING_ENABLED
+    generateRandomVector(&vec2);
+#else
+    print("Insira valores entre %d e %d para o segundo vetor\n", MIN, MAX);
+    vec_read(&vec2, MIN, MAX);
+#endif
+    if (matrix_initialized)
+        mat_destroy(&stored_matrix);
+    vec_mult(&stored_matrix, vec, &vec2);
+    matrix_initialized = 1;
+
+    print("Segundo vetor lido:\n");
+    vec_write(&vec2, trail);
+    vec_destroy(&vec2);
+
+    print("\nMatriz do produto dos dois vetores:\n");
+    mat_write(&stored_matrix, trail + 1);
+    print("\n");
+}
+
+/**
+ * @brief @a Wrapper para calcular o determinante.
+ * Verifica se a matriz foi inicializada antes de chamar a função matemática pesada.
+ */
+void menu_matrix_determinant(void *_)
+{
+    if (!matrix_initialized)
+    {
+        print("Para usar esta opção tem primeiro que usar a opção anterior para obter a matriz.\n");
+        return;
+    }
+
+    print("Determinante da matriz 20x20: %g\n\n", mat_get_determinant(&stored_matrix));
+}
+
+void menu_destroy()
+{
+    if (matrix_initialized)
+        mat_destroy(&stored_matrix);
 }
 
 int menu_show(int page, int *option)
