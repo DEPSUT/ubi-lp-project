@@ -17,7 +17,7 @@
  * - O menu apresenta a opção extra "10 - Gerar novos números".
  * - Inclui a biblioteca `<time.h>` e usa `srand()`.
  */
-#define DEBUGGING_ENABLED 1
+#define DEBUGGING_ENABLED 0
 
 /**
  * @brief Número de itens a apresentar por página no menu.
