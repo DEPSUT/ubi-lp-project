@@ -1,6 +1,6 @@
 /**
  * @file lialg.c
- * @brief Biblioteca de Álgebra Linear (@a Linear @a Algebra).
+ * @brief Biblioteca de Álgebra Linear (_Linear Algebra_).
  * Define os Tipos Abstratos de Dados para Vetores e Matrizes,
  * bem como as funções para a sua manipulação, alocação dinâmica e cálculos.
  * @authors Rafael Reis, Diogo Rodrigues, António Gaspar, Martim Roque
@@ -11,8 +11,8 @@
 
 /**
  * @brief Verifica se a alocação de memória foi bem sucedida.
- * Termina o programa se o ponteiro for @c NULL.
- * @param ptr Ponteiro retornado pelo @c malloc().
+ * Termina o programa se o ponteiro for `NULL`.
+ * @param ptr Ponteiro retornado pelo `malloc()`.
  */
 void checkForMallocErr(void *ptr)
 {
@@ -144,7 +144,7 @@ void mat_write(const matrix *mat, int trail)
 }
 
 /**
- * @brief Calcula o determinante utilizando Eliminação de @a Gauss com Pivotagem Parcial.
+ * @brief Calcula o determinante utilizando Eliminação de _Gauss_ com Pivotagem Parcial.
  * * O algoritmo transforma a matriz numa Matriz Triangular Superior.
  * O determinante é o produto da diagonal principal (ajustado pelo sinal das trocas de linhas).
  * * @par Algoritmo:

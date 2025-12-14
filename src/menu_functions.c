@@ -8,8 +8,8 @@
 #include "menu_functions.h"
 
 /**
- * @brief Tabela de Despacho (@a Dispatch @a Table) do menu.
- * Substitui a necessidade de grandes estruturas @c switch.
+ * @brief Tabela de Despacho (_Dispatch Table_) do menu.
+ * Substitui a necessidade de grandes estruturas `switch`.
  * Cada linha contém metadados e um ponteiro para a função a executar.
  */
 const menuItem menu[] = {
@@ -26,12 +26,13 @@ const menuItem menu[] = {
     {"Determinante", "Calcula e apresenta a determinante da matriz criada na opção anterior.", menu_matrix_determinant, 0},
 };
 
-const int TOTAL_ITEMS = sizeof(menu) / sizeof(menu[0]);
-const int TOTAL_PAGES = (TOTAL_ITEMS + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;
+
+const int TOTAL_ITEMS = sizeof(menu) / sizeof(menu[0]);                         ///< Total de itens em `menu[]`
+const int TOTAL_PAGES = (TOTAL_ITEMS + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE;    ///< Número total de páginas do menu tendo em conta `ITEMS_PER_PAGE`
 
 /**
  * @brief Matriz persistente gerada pela opção 10.
- * Declarada como @c static para restringir o @c scope a este ficheiro.
+ * Declarada como `static` para restringir o `scope` a este ficheiro.
  */
 static matrix stored_matrix;       ///< Guarda o valor da matriz para ser utilizada noutra opção do menu
 static int matrix_initialized = 0; ///< Permite saber se a matriz já foi criada
@@ -64,7 +65,6 @@ void menu_sin(void *_vec)
 {
     vector *vec = (vector *)_vec;
     print("Seno de cada elemento:\n");
-    // Trail of spaces for the result of sine (formats nicely)
     const int trail = getTrail(vec);
     const int sinTrail = 9;
     for (int i = 0; i < vec->size; i++)
@@ -280,9 +280,9 @@ void menu_prime_decomposition(void *_vec)
 
 /**
  * @brief Gera uma matriz a partir do produto externo de dois vetores.
- * A matriz resultante é guardada na variável estática @c stored_matrix
+ * A matriz resultante é guardada na variável estática `stored_matrix`
  * para poder ser usada posteriormente pela função do determinante.
- * @param _vec Ponteiro @c void para o vetor principal (@a cast para @c vector* internamente).
+ * @param _vec Ponteiro `void` para o vetor principal (_cast_ para `vector*` internamente).
  */
 void menu_matrix_20x20(void *_vec)
 {
@@ -311,7 +311,7 @@ void menu_matrix_20x20(void *_vec)
 }
 
 /**
- * @brief @a Wrapper para calcular o determinante.
+ * @brief _Wrapper_ para calcular o determinante.
  * Verifica se a matriz foi inicializada antes de chamar a função matemática pesada.
  */
 void menu_matrix_determinant(void *_)

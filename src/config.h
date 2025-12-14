@@ -11,11 +11,11 @@
 #define CONFIG_H
 
 /**
- * @brief @a Flag de depuração e testes.
- * * Se definido como @c 1:
+ * @brief _Flag_ de depuração e testes.
+ * * Se definido como `1`:
  * - Os vetores são gerados aleatoriamente (poupa tempo na inserção manual).
  * - O menu apresenta a opção extra "10 - Gerar novos números".
- * - Inclui a biblioteca @c <time.h> e usa @c srand().
+ * - Inclui a biblioteca `<time.h>` e usa `srand()`.
  */
 #define DEBUGGING_ENABLED 1
 

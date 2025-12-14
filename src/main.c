@@ -2,7 +2,7 @@
  * @file main.c
  * @brief Ponto de entrada da aplicação.
  * Responsável pela inicialização das estruturas de dados principais,
- * gestão do ciclo de vida do programa (@a Setup -> @a Loop -> @a Teardown) e
+ * gestão do ciclo de vida do programa (_Setup -> Loop -> Teardown_) e
  * orquestração da navegação entre páginas do menu.
  * @authors Rafael Reis, Diogo Rodrigues, António Gaspar, Martim Roque
  * @version 1.9
@@ -21,13 +21,13 @@
  * @brief Função principal.
  * * Fluxo de execução:
  * 1. Inicialização do vetor (aleatória ou manual).
- * 2. Ciclo principal (@a loop) de interação.
+ * 2. Ciclo principal (_loop_) de interação.
  * 3. Renderização do menu e paginação.
  * 4. Execução da ação escolhida via tabela de despacho.
  * 5. Libertação de memória.
  * * @param argc Número de argumentos da linha de comandos.
- * @param argv @c array de @c strings com os argumentos.
- * @retval int @c 0 em caso de sucesso.
+ * @param argv `array` de `strings` com os argumentos.
+ * @retval int `0` em caso de sucesso.
  */
 int main(int argc, char **argv)
 {
@@ -102,12 +102,12 @@ int main(int argc, char **argv)
         }
         if (option <= TOTAL_ITEMS && option > 0)
         {
-            option--;
+            option--; // Array logic
             if (menu[option].useVector)
                 menu[option].action(&vec);
             else
                 menu[option].action(NULL);
-            option++;
+            option++; // Menu logic
             print("Pressione ENTER para prosseguir...");
             waitForEnter();
         }

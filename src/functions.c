@@ -1,6 +1,6 @@
 /**
  * @file functions.c
- * @brief Implementação das funções auxiliares de sistema e \a I/O.
+ * @brief Implementação das funções auxiliares de sistema e _I/O_.
  * @authors Rafael Reis, Diogo Rodrigues, António Gaspar, Martim Roque
  * @version 1.6
  */
@@ -9,7 +9,7 @@
 
 /**
  * @brief Variável global para rastrear o cursor vertical.
- * Incrementada sempre que um @c \n é detetado na entrada ou saída.
+ * Incrementada sempre que um `\n` é detetado na entrada ou saída.
  */
 int lines = 0;
 
@@ -40,10 +40,10 @@ int numOfDig(int num)
 }
 
 /**
- * @brief Implementação segura de leitura de @a inputs.
- * * Resolve problemas de @c buffer do @c scanf() original e conta as linhas
+ * @brief Implementação segura de leitura de _inputs_.
+ * * Resolve problemas de _buffer_ do `scanf()` original e conta as linhas
  * para permitir a limpeza correta do ecrã posteriormente.
- * * Utiliza @c va_list para passar os argumentos para @c vscanf().
+ * * Utiliza `va_list` para passar os argumentos para `vscanf()`.
  * @param string Formato (ex: "%d").
  * @param ... Argumentos variáveis (ponteiros para as variáveis).
  */
@@ -71,9 +71,9 @@ void scan(const char *string, ...)
 }
 
 /**
- * @brief Implementação de @a wrapper para @c printf().
- * Analisa a @c string antes de imprimir para contar quantos @c \n existem
- * e atualizar a variável global @c lines.
+ * @brief Implementação de _wrapper_ para `printf()`.
+ * Analisa a `string` antes de imprimir para contar quantos `\n` existem
+ * e atualizar a variável global `lines`.
  * @param string Texto a imprimir.
  * @param ... Argumentos variáveis.
  */

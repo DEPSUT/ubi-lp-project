@@ -2,7 +2,7 @@
  * @file menu_functions.h
  * @brief Controlador da lógica de negócio e definição do menu.
  * Contém a estrutura de dados que define cada item do menu e liga
- * a interface de texto às funções lógicas da biblioteca @c lialg.h.
+ * a interface de texto às funções lógicas da biblioteca `lialg.h`.
  * @authors Rafael Reis, Diogo Rodrigues, António Gaspar, Martim Roque
  * @version 1.0
  */
@@ -19,41 +19,41 @@
 /**
  * @struct menuItem
  * @brief Define uma opção individual do menu.
- * Utiliza o padrão "@a Dispatch @a Table" (Ponteiros para funções) para evitar
- * estruturas @c switch gigantes.
+ * Utiliza o padrão _"Dispatch Table"_ (Ponteiros para funções) para evitar
+ * estruturas `switch` gigantes.
  */
 typedef struct menuItem
 {
     const char *title; ///< O título curto da opção, visível na lista principal.
     const char *help;  ///< Descrição detalhada apresentada no menu de ajuda.
     /**
-     * @brief Ponteiro para a função a executar (@a Callback).
-     * @param vec Ponteiro @c void genérico (normalmente @a cast para @c vector*).
+     * @brief Ponteiro para a função a executar (_Callback_).
+     * @param vec Ponteiro `void` genérico (normalmente _cast_ para `vector*`).
      */
     void (*action)(void *vec);
-    const int useVector; ///< @a Flag: @c 1 se a função requer o vetor principal, @c 0 caso contrário.
+    const int useVector; ///< _Flag_: `1` se a função requer o vetor principal, `0` caso contrário.
 } menuItem;
 
 /**
- * @brief @c array constante contendo todas as opções do menu.
- * Definido em @c menu_functions.c.
+ * @brief `array` constante contendo todas as opções do menu.
+ * Definido em `menu_functions.c`.
  */
 extern const menuItem menu[];
 
 /**
- * @brief Número total de elementos presentes na @c array @c menu[]
+ * @brief Número total de elementos presentes na `array` `menu[]`.
  */
 extern const int TOTAL_ITEMS;
 
 /**
- * @brief Número total de páginas tendo em conta @c ITEMS_PER_PAGE definido em @c config.h
+ * @brief Número total de páginas tendo em conta `ITEMS_PER_PAGE` definido em `config.h`.
  */
 extern const int TOTAL_PAGES;
 
 #if DEBUGGING_ENABLED
 /**
  * @brief Preenche o vetor com números aleatórios.
- * Função utilitária disponível apenas em modo de @a debug para facilitar
+ * Função utilitária disponível apenas em modo de _debug_ para facilitar
  * testes rápidos sem necessidade de inserção manual de dados.
  * @param vec Ponteiro para o vetor a preencher.
  */
@@ -61,7 +61,7 @@ void generateRandomVector(vector *vec);
 #endif
 
 /**
- * @brief Calcula o espaçamento necessário para formatação visual (@a padding).
+ * @brief Calcula o espaçamento necessário para formatação visual (_padding_).
  * Analisa o número de dígitos do maior e menor valor do vetor para
  * determinar a largura da coluna na impressão de tabelas.
  * @param vec Ponteiro para o vetor a analisar.
@@ -72,7 +72,7 @@ int getTrail(vector *vec);
 /**
  * @name Callbacks do Menu
  * Conjunto de funções executadas quando o utilizador seleciona uma opção.
- * Recebem um ponteiro @c void* para manter a assinatura genérica da @c struct @c menuItem.
+ * Recebem um ponteiro `void*` para manter a assinatura genérica da `struct` `menuItem`.
  * @{
  */
 
@@ -94,7 +94,7 @@ void menu_mult_3(void *_vec);
 /** @brief Apresenta o vetor ordenado (sem alterar o original permanentemente). */
 void menu_sorted_vector(void *_vec);
 
-/** @brief Pede um segundo vetor e calcula a soma linear (@c Vec1 + 2 * @c Vec2). */
+/** @brief Pede um segundo vetor e calcula a soma linear (`Vec1` + 2 * `Vec2`). */
 void menu_sum_second_vector(void *_vec);
 
 /** @brief Calcula e apresenta a decomposição em fatores primos de cada elemento. */
@@ -111,7 +111,7 @@ void menu_help_page(void *_vec);
 
 /**
  * @brief Calcula o determinante da matriz gerada anteriormente.
- * @warning Requer que a função @c menu_matrix_20x20() tenha sido executada previamente.
+ * @warning Requer que a função `menu_matrix_20x20()` tenha sido executada previamente.
  */
 void menu_matrix_determinant(void *_);
 
@@ -127,9 +127,9 @@ void menu_destroy();
 /**
  * @brief Renderiza a interface do menu e processa a paginação.
  * Responsável por desenhar as opções no ecrã e ler a escolha do utilizador.
- * @param page Índice da página atual (@c 0 a @c TOTAL_PAGES - @c 1).
+ * @param page Índice da página atual (`0` a `TOTAL_PAGES` - `1`).
  * @param option Ponteiro onde será guardada a opção escolhida pelo utilizador.
- * @retval int O índice (@a offset) do primeiro item mostrado na página atual.
+ * @retval int O índice (_offset_) do primeiro item mostrado na página atual.
  */
 int menu_show(int page, int *option);
 
